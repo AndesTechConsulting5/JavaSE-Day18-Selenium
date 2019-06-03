@@ -100,6 +100,23 @@ public class AppTest
     }
 
 
+    private void saveScreenShot(){
+
+        File screen =  ((TakesScreenshot)wd).getScreenshotAs(OutputType.FILE);
+
+        String fileName = "E:\\screens\\screen_"+ System.currentTimeMillis() + ".png";
+
+        try {
+            Files.copy(new FileInputStream(screen), Paths.get(fileName),
+                    StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (IOException ex){ex.printStackTrace();
+
+        }
+
+    }
+
+
     @Test
     public void loginScreenTest() throws InterruptedException
     {
@@ -114,17 +131,8 @@ public class AppTest
         wait1.until(x -> x.findElement(By.linkText("Login"))).click();
 
 
-       File screen =  ((TakesScreenshot)wd).getScreenshotAs(OutputType.FILE);
+        saveScreenShot();
 
-       String fileName = "E:\\screens\\screen_"+ System.currentTimeMillis() + ".png";
-
-       try {
-           Files.copy(new FileInputStream(screen), Paths.get(fileName),
-                   StandardCopyOption.REPLACE_EXISTING);
-       }
-       catch (IOException ex){ex.printStackTrace();
-
-       }
 
         Thread.sleep(1000);
 
