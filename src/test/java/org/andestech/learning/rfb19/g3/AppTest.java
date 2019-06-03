@@ -30,6 +30,8 @@ public class AppTest
 {
     private WebDriver wd = null;
     private ChromeOptions chromeOptions;
+    private String loginName, loginPass;
+    private Wait<WebDriver> wait1;
 
     @BeforeClass
     public void initData(){
@@ -137,6 +139,75 @@ public class AppTest
         Thread.sleep(1000);
 
     }
+
+
+    private void loginInit()
+    {
+
+        wd = new ChromeDriver(chromeOptions);
+        wait1 = new WebDriverWait(wd,5);
+
+        wd.get("http://andestech.org/learning/rfb18/");
+        wait1.until( x -> x.findElement(By.linkText("Login"))).click();
+
+        wd.findElement(By.name("reset")).click();
+
+        WebElement login = wd.findElement(By.id("login"));
+        login.sendKeys(loginName);
+        wd.findElement(By.id("pass")).sendKeys(loginPass);
+
+
+        login.submit();
+
+    }
+
+    private boolean isAlertPresent(){
+
+        WebDriverWait wait = new WebDriverWait(wd, 2000);
+        try {
+            wait.until(ExpectedConditions.alertIsPresent());
+            return true;
+        } catch (TimeoutException ex) {
+            return false;
+        }
+    }
+
+
+    @Test(groups = "positive")
+    public void positiveLoginTest() throws InterruptedException
+    {
+
+        loginName = "ppetrov";
+        loginPass = "P@ssw0rd";
+
+        loginInit();
+
+        if(isAlertPresent()) {
+        Alert alert = wd.switchTo().alert();
+        String info = alert.getText();
+        alert.accept();
+        Assert.fail(info);
+
+    }
+        else{saveScreenShot();}
+
+        // проверка на успешный вход
+
+        String headerText = wd.findElement(By.tagName("header")).getText();
+        System.out.println(headerText);
+
+        Cookie cookie = wd.manage().getCookieNamed("loginOk");
+        String cookieData = cookie.getValue();
+
+        Assert.assertTrue(cookieData.indexOf(loginName) != -1 && headerText.indexOf(loginName) != -1, "Smth wrong");
+
+        Thread.sleep(2000);
+
+        wait1.until( x -> x.findElement(By.linkText("Logout"))).click();
+
+    }
+
+
 
 
 
