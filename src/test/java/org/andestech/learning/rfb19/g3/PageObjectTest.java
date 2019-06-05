@@ -3,6 +3,7 @@ package org.andestech.learning.rfb19.g3;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Wait;
 import org.testng.Assert;
@@ -16,6 +17,7 @@ public class PageObjectTest {
     private ChromeOptions chromeOptions;
     private String loginName, loginPass;
     private Wait<WebDriver> wait1;
+    private LoginPage loginPage;
 
     @BeforeClass
     public void initData(){
@@ -30,24 +32,28 @@ public class PageObjectTest {
         chromeOptions.addArguments("--user-data-dir=C:\\Users\\and\\AppData\\Local\\Chromium\\User Data");
 
         chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-
+        wd = new ChromeDriver(chromeOptions);
+        loginPage = new LoginPage(wd);
 
     }
 
 
 
     @Test
-    public void loginTest(){
+    public void loginTest() throws InterruptedException{
 
-        LoginPage loginPage = new LoginPage(wd);
 
-        loginPage.setLogin("ppetrov");
-        loginPage.setPassword("P@ssw0rd");
+        Assert.assertTrue(loginPage.login("ppetrov", "P@ssw0rd"));
+        Assert.assertTrue(loginPage.login("bpetrov", "P@ssw0rd"));
 
-        Assert.assertTrue(loginPage.login());
 
     }
 
+    @Test
+    public void login2Test() throws InterruptedException
+    {
+        Assert.assertTrue(loginPage.login("bpetrov2", "P@ssw0rd"));
+    }
 
     @AfterClass
     public void tearDown()
