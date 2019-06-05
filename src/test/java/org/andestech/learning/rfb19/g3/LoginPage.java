@@ -75,9 +75,6 @@ public class LoginPage {
     }
 
 
-
-
-
     public boolean login(String loginText, String passText) throws InterruptedException{
         this.loginText = loginText;
         this.passText = passText;

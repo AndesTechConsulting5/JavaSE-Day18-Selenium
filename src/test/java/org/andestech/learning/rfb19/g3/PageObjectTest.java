@@ -11,6 +11,9 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import org.openqa.selenium.html5.*;
+
+
 public class PageObjectTest {
 
     private WebDriver wd = null;
@@ -42,12 +45,9 @@ public class PageObjectTest {
     @Test
     public void loginTest() throws InterruptedException{
 
-
         Assert.assertTrue(loginPage.login("ppetrov", "P@ssw0rd"));
         Assert.assertTrue(loginPage.login("bpetrov", "P@ssw0rd"));
-
-
-    }
+     }
 
     @Test
     public void login2Test() throws InterruptedException
